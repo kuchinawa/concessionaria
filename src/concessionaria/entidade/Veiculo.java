@@ -38,6 +38,51 @@ public class Veiculo {
                 + formatarData(dataFabricacao) + "]";
     }
 
-    // Getters e Setters (mesmo código já fornecido anteriormente)
-    // ...
+    public String getPlaca() {
+        return placa;
+    }
+
+    public void setPlaca(String placa) {
+        this.placa = placa;
+    }
+
+    public String getRenavam() {
+        return renavam;
+    }
+
+    public void setRenavam(String renavam) {
+        this.renavam = renavam;
+    }
+
+    public String getNomeCondutor() {
+        return nomeCondutor;
+    }
+
+    public void setNomeCondutor(String nomeCondutor) {
+        this.nomeCondutor = nomeCondutor;
+    }
+
+    public String getCpfCondutor() {
+        return cpfCondutor;
+    }
+
+    public void setCpfCondutor(String cpfCondutor) {
+        this.cpfCondutor = cpfCondutor;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public Date getDataFabricacao() {
+        return dataFabricacao;
+    }
+
+    public void setDataFabricacao(Date dataFabricacao) {
+        this.dataFabricacao = dataFabricacao;
+    }
 }

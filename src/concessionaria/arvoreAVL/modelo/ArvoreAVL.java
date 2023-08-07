@@ -1,18 +1,19 @@
 package concessionaria.arvoreAVL.modelo;
 
-public class ArvoreAVL {
 
-    No raiz;
+public class ArvoreAVL<T> {
+
+    No<T> raiz;
 
     public ArvoreAVL() {
         this.setRaiz(null);
     }
 
-    public No getRaiz() {
+    public No<T> getRaiz() {
         return raiz;
     }
 
-    public void setRaiz(No raiz) {
+    public void setRaiz(No<T> raiz) {
         this.raiz = raiz;
     }
 
@@ -20,7 +21,7 @@ public class ArvoreAVL {
         this.ordem(getRaiz());
     }
 
-    private void ordem(No a){
+    private void ordem(No<T> a){
 
         if(a != null) {
             this.ordem(a.getEsq());
@@ -30,14 +31,12 @@ public class ArvoreAVL {
 
     }
 
-    // pegar altura de um nó avl
-
-    private Integer altura(No a) {
+    private Integer altura(No<T> a) {
 
         if(a == null)
             return -1;
 
-        return a.getAlturaNo();
+        return a.alturaNo;
 
     }
 
@@ -47,7 +46,7 @@ public class ArvoreAVL {
 
     }
 
-    private Integer obterFB(No a) {
+    private Integer obterFB(No<T> a) {
 
         if(a == null)
             return 0;
@@ -55,20 +54,20 @@ public class ArvoreAVL {
         return this.altura(a.getEsq()) - this.altura(a.getDir());
     }
 
-    public void inserir(Integer k, String v) {
+    public void inserir(Integer k, T v) {
         this.raiz = this.inserir(getRaiz(), k, v);
     }
 
-    private No inserir(No a, Integer k, String v) {
+    private No<T> inserir(No<T> a, Integer k, T v) {
 
         if(a == null)
-            return new No(k, v);
+            return new No<T>(k, v);
 
-        if(k < a.chave)
-            a.esq = this.inserir(a.esq, k, v);
+        if(a.compareTo(k) > 0)
+            a.esq = this.inserir(a.getEsq(), k, v);
 
-        else if(k > a.chave)
-            a.dir = this.inserir(a.dir, k, v);
+        else if(a.compareTo(k) < 0)
+            a.dir = this.inserir(a.getDir(), k, v);
 
         else
             return a;
@@ -108,10 +107,10 @@ public class ArvoreAVL {
         return a;
     }
 
-    private No res(No x) {
+    private No<T> res(No<T> x) {
 
-        No y = x.getDir();
-        No z = y.getEsq();
+        No<T> y = x.getDir();
+        No<T> z = y.getEsq();
 
         // executa rotação
 
@@ -124,10 +123,10 @@ public class ArvoreAVL {
         return y;
     }
 
-    private No rds(No y) {
+    private No<T> rds(No<T> y) {
 
-        No x = y.getEsq();
-        No z = x.getDir();
+        No<T> x = y.getEsq();
+        No<T> z = x.getDir();
 
         // executa rotação
 
@@ -140,8 +139,60 @@ public class ArvoreAVL {
         return x;
     }
 
+    public void remover(Integer chave) {
+        this.raiz = remover(raiz, chave);
+    }
+
+    private No<T> remover(No<T> no, Integer chave) {
+        if (no == null)
+            return null;
+
+        if (chave.compareTo(no.getChave()) < 0)
+            no.setEsq(remover(no.getEsq(), chave));
+        else if (chave.compareTo(no.getChave()) > 0)
+            no.setDir(remover(no.getDir(), chave));
+        else {
+            if (no.getEsq() == null || no.getDir() == null) {
+                no = (no.getEsq() != null) ? no.getEsq() : no.getDir();
+            } else {
+                No<T> temp = encontrarMinimo(no.getDir());
+                no.setChave(temp.getChave());
+                no.setValor(temp.getValor());
+                no.setDir(remover(no.getDir(), temp.getChave()));
+            }
+        }
+
+        if (no != null) {
+            no.alturaNo = 1 + maior(altura(no.getEsq()), altura(no.getDir()));
+            int fb = obterFB(no);
+
+            if (fb > 1 && obterFB(no.getEsq()) >= 0)
+                return rds(no);
+
+            if (fb > 1 && obterFB(no.getEsq()) < 0) {
+                no.setEsq(res(no.getEsq()));
+                return rds(no);
+            }
+
+            if (fb < -1 && obterFB(no.getDir()) <= 0)
+                return res(no);
+
+            if (fb < -1 && obterFB(no.getDir()) > 0) {
+                no.setDir(rds(no.getDir()));
+                return res(no);
+            }
+        }
+
+        return no;
+    }
+
+    private No<T> encontrarMinimo(No<T> no) {
+        if (no == null || no.getEsq() == null)
+            return no;
+        return encontrarMinimo(no.getEsq());
+    }
+
     /*
      * Implementar a remoção de acordo com o código da prática 4
      */
-
 }

@@ -1,60 +1,63 @@
 package concessionaria.arvoreAVL.modelo;
 
-public class No {
+public class No<T> implements Comparable<Integer>{
 
     Integer chave;
-    String valor;
+    T valor;
     Integer alturaNo;
-    No esq, dir;
+    No<T> esq, dir;
 
-    public No(Integer k, String v) {
+    public No(Integer k, T v) {
 
         this.setChave(k);
         this.setValor(v);
         this.setAlturaNo(0);
         this.setEsq(null);
         this.setDir(null);
+    }
 
+    public int getAlturaNo() {
+        return alturaNo;
+    }
+
+    public void setAlturaNo(int alturaNo) {
+        this.alturaNo = alturaNo;
     }
 
     public Integer getChave() {
         return chave;
     }
-
     public void setChave(Integer chave) {
         this.chave = chave;
     }
-
-    public String getValor() {
+    public T getValor() {
         return valor;
     }
-
-    public void setValor(String valor) {
+    public void setValor(T valor) {
         this.valor = valor;
     }
-
-    public Integer getAlturaNo() {
-        return alturaNo;
-    }
-
-    public void setAlturaNo(Integer alturaNo) {
-        this.alturaNo = alturaNo;
-    }
-
-    public No getEsq() {
+    public No<T> getEsq() {
         return esq;
     }
-
-    public void setEsq(No esq) {
+    public void setEsq(No<T> esq) {
         this.esq = esq;
     }
-
-    public No getDir() {
+    public No<T> getDir() {
         return dir;
     }
-
-    public void setDir(No dir) {
+    public void setDir(No<T> dir) {
         this.dir = dir;
+    }
+
+    @Override
+    public int compareTo(Integer o) {
+
+        if(this.getChave() < o)
+            return -1;
+        if(this.getChave() > o)
+            return 1;
+
+        return 0;
     }
 
 }
