@@ -1,4 +1,4 @@
-package concessionaria.arvoreAVL.modelo;
+package concessionaria.aplicacao;
 
 
 public class ArvoreAVL<T> {
@@ -47,10 +47,8 @@ public class ArvoreAVL<T> {
     }
 
     private Integer obterFB(No<T> a) {
-
         if(a == null)
             return 0;
-
         return this.altura(a.getEsq()) - this.altura(a.getDir());
     }
 
@@ -59,86 +57,60 @@ public class ArvoreAVL<T> {
     }
 
     private No<T> inserir(No<T> a, Integer k, T v) {
-
         if(a == null)
             return new No<T>(k, v);
-
         if(a.compareTo(k) > 0)
             a.esq = this.inserir(a.getEsq(), k, v);
-
         else if(a.compareTo(k) < 0)
             a.dir = this.inserir(a.getDir(), k, v);
-
         else
             return a;
-
         /*2. Atualiza altura do ancestral do nó inserido */
-
         a.alturaNo = 1 +
                 this.maior(this.altura(a.getEsq()), this.altura(a.getDir()));
-
         /*3. Obter FB */
-
         int fb = this.obterFB(a);
         int fbEsq = this.obterFB(a.getEsq());
         int fbDir = this.obterFB(a.getDir());
 
-
         if(fb > 1 && fbEsq >= 0)
-
             return this.rds(a);
-
         if(fb > 1 && fbEsq < 0) {
-
             a.esq = this.res(a.esq);
             return rds(a);
         }
 
         if(fb < -1 && fbDir <= 0)
-
             return this.res(a);
-
         if(fb < -1 && fbDir > 0) {
 
             a.dir = this.rds(a.dir);
             return res(a);
         }
-
         return a;
     }
 
     private No<T> res(No<T> x) {
-
         No<T> y = x.getDir();
         No<T> z = y.getEsq();
-
         // executa rotação
-
         y.setEsq(x);
         x.setDir(z);
-
         x.alturaNo = 1 + this.maior(altura(x.getEsq()), altura(x.getDir()));
         y.alturaNo = 1 + this.maior(altura(y.getEsq()), altura(y.getDir()));
-
         return y;
     }
-
     private No<T> rds(No<T> y) {
-
         No<T> x = y.getEsq();
         No<T> z = x.getDir();
-
         // executa rotação
-
         x.setDir(y);
         y.setEsq(z);;
-
         y.alturaNo = 1 + this.maior(altura(y.getEsq()), altura(y.getDir()));
         x.alturaNo = 1 + this.maior(altura(x.getEsq()), altura(x.getDir()));
 
         return x;
     }
-
     public void remover(Integer chave) {
         this.raiz = remover(raiz, chave);
     }
@@ -191,7 +163,43 @@ public class ArvoreAVL<T> {
             return no;
         return encontrarMinimo(no.getEsq());
     }
+    public T buscarPorPlaca(String placa) {
+        return buscarPorPlaca(getRaiz(), placa);
+    }
 
+    private T buscarPorPlaca(No<T> no, String placa) {
+        if (no == null) {
+            return null;
+        }
+
+        int comparacao = placa.compareTo(no.getValor().getPlaca());
+        if (comparacao == 0) {
+            return no.getValor();
+        } else if (comparacao < 0) {
+            return buscarPorPlaca(no.getEsq(), placa);
+        } else {
+            return buscarPorPlaca(no.getDir(), placa);
+        }
+    }
+
+    public T buscarPorRenavam(String renavam) {
+        return buscarPorRenavam(getRaiz(), renavam);
+    }
+
+    private T buscarPorRenavam(No<T> no, String renavam) {
+        if (no == null) {
+            return null;
+        }
+
+        int comparacao = renavam.compareTo(no.getValor().getRenavam());
+        if (comparacao == 0) {
+            return no.getValor();
+        } else if (comparacao < 0) {
+            return buscarPorRenavam(no.getEsq(), renavam);
+        } else {
+            return buscarPorRenavam(no.getDir(), renavam);
+        }
+    }
     /*
      * Implementar a remoção de acordo com o código da prática 4
      */

@@ -1,22 +1,13 @@
-import java.text.SimpleDateFormat;
-import java.util.Date;
+package concessionaria.entidade;
 
 public class Veiculo {
+
     private String placa;
     private String renavam;
     private String nomeCondutor;
     private String cpfCondutor;
     private String modelo;
-    private Date dataFabricacao;
-
-    public Veiculo(String placa, String renavam, String nomeCondutor, String cpfCondutor, String modelo, Date dataFabricacao) {
-        this.placa = placa;
-        this.renavam = renavam;
-        this.nomeCondutor = nomeCondutor;
-        this.cpfCondutor = cpfCondutor;
-        this.modelo = modelo;
-        this.dataFabricacao = dataFabricacao;
-    }
+    private int ano;
 
     public Veiculo() {
         this.placa = "";
@@ -24,20 +15,18 @@ public class Veiculo {
         this.nomeCondutor = "";
         this.cpfCondutor = "";
         this.modelo = "";
-        this.dataFabricacao = new Date();
-    }
-    private String formatarData(Date data) {
-        SimpleDateFormat formatador = new SimpleDateFormat("dd/MM/yyyy");
-        return formatador.format(data);
+        this.ano = 0;
     }
 
-    @Override
-    public String toString() {
-        return "Veiculo [placa=" + placa + ", renavam=" + renavam + ", nomeCondutor=" + nomeCondutor
-                + ", cpfCondutor=" + cpfCondutor + ", modelo=" + modelo + ", dataFabricacao="
-                + formatarData(dataFabricacao) + "]";
-    }
 
+    public Veiculo(String placa, String renavam, String nomeCondutor, String cpfCondutor, String modelo, int ano) {
+        this.placa = placa;
+        this.renavam = renavam;
+        this.nomeCondutor = nomeCondutor;
+        this.cpfCondutor = cpfCondutor;
+        this.modelo = modelo;
+        setAno(ano);
+    }
     public String getPlaca() {
         return placa;
     }
@@ -78,11 +67,19 @@ public class Veiculo {
         this.modelo = modelo;
     }
 
-    public Date getDataFabricacao() {
-        return dataFabricacao;
+    public int getAno() {
+        return ano;
     }
 
-    public void setDataFabricacao(Date dataFabricacao) {
-        this.dataFabricacao = dataFabricacao;
+    public void setAno(int ano) {
+        if (ano < 1900 || ano > 3000) {
+            throw new IllegalArgumentException("Ano de fabricação inválido. O ano deve estar entre 1900 e 3000.");
+        }
+        this.ano = ano;
+    }
+    @Override
+    public String toString() {
+        return "Veiculo [placa=" + placa + ", renavam=" + renavam + ", nomeCondutor=" + nomeCondutor + ", cpfCondutor="
+                + cpfCondutor + ", modelo=" + modelo + ", ano=" + ano + "]";
     }
 }

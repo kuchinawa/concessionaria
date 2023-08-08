@@ -1,4 +1,4 @@
-package concessionaria.arvoreAVL.modelo;
+package concessionaria.aplicacao;
 
 public class No<T> implements Comparable<Integer>{
 
@@ -56,7 +56,6 @@ public class No<T> implements Comparable<Integer>{
             return -1;
         if(this.getChave() > o)
             return 1;
-
         return 0;
     }
 
