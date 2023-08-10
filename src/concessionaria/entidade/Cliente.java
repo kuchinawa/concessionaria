@@ -1,5 +1,6 @@
 package concessionaria.entidade;
 
+import concessionaria.aplicacao.ArvoreAVL;
 import concessionaria.aplicacao.Protocolo;
 import concessionaria.aplicacao.Servidor;
 
@@ -8,6 +9,13 @@ import java.util.Scanner;
 public class Cliente {
 
     public static void main(String[] args) {
+        ArvoreAVL<Veiculo> cos = new ArvoreAVL();
+        cos.inserir(1, new Veiculo("POG7T45", "781246752", "Icaro", "12346578545", "Kwid", 2020));
+
+
+
+
+        /*
         Scanner scanner = new Scanner(System.in);
         Servidor servidor = new Servidor(); // Crie uma instância do servidor
 
@@ -62,7 +70,7 @@ public class Cliente {
                 default:
                     System.out.println("Opção inválida. Escolha uma opção válida.");
             }
-        }
+        }*/
     }
 }
 

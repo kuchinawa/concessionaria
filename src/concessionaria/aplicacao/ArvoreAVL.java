@@ -21,73 +21,28 @@ public class ArvoreAVL<T> {
         this.ordem(getRaiz());
     }
 
-    private void ordem(No<T> a){
-
-        if(a != null) {
+    private void ordem(No<T> a) {
+        if (a != null) {
             this.ordem(a.getEsq());
-            System.out.println(a.getChave() + ": " + a.getValor());
+            System.out.println(a.getRenavam() + ": " + a.getValor());
             this.ordem(a.getDir());
         }
-
     }
 
     private Integer altura(No<T> a) {
-
-        if(a == null)
+        if (a == null)
             return -1;
-
         return a.alturaNo;
-
     }
 
     private Integer maior(Integer a, Integer b) {
-
         return (a > b) ? a : b;
-
     }
 
     private Integer obterFB(No<T> a) {
-        if(a == null)
+        if (a == null)
             return 0;
         return this.altura(a.getEsq()) - this.altura(a.getDir());
-    }
-
-    public void inserir(Integer k, T v) {
-        this.raiz = this.inserir(getRaiz(), k, v);
-    }
-
-    private No<T> inserir(No<T> a, Integer k, T v) {
-        if(a == null)
-            return new No<T>(k, v);
-        if(a.compareTo(k) > 0)
-            a.esq = this.inserir(a.getEsq(), k, v);
-        else if(a.compareTo(k) < 0)
-            a.dir = this.inserir(a.getDir(), k, v);
-        else
-            return a;
-        /*2. Atualiza altura do ancestral do nó inserido */
-        a.alturaNo = 1 +
-                this.maior(this.altura(a.getEsq()), this.altura(a.getDir()));
-        /*3. Obter FB */
-        int fb = this.obterFB(a);
-        int fbEsq = this.obterFB(a.getEsq());
-        int fbDir = this.obterFB(a.getDir());
-
-        if(fb > 1 && fbEsq >= 0)
-            return this.rds(a);
-        if(fb > 1 && fbEsq < 0) {
-            a.esq = this.res(a.esq);
-            return rds(a);
-        }
-
-        if(fb < -1 && fbDir <= 0)
-            return this.res(a);
-        if(fb < -1 && fbDir > 0) {
-
-            a.dir = this.rds(a.dir);
-            return res(a);
-        }
-        return a;
     }
 
     private No<T> res(No<T> x) {
@@ -100,107 +55,172 @@ public class ArvoreAVL<T> {
         y.alturaNo = 1 + this.maior(altura(y.getEsq()), altura(y.getDir()));
         return y;
     }
+
     private No<T> rds(No<T> y) {
         No<T> x = y.getEsq();
         No<T> z = x.getDir();
         // executa rotação
         x.setDir(y);
-        y.setEsq(z);;
+        y.setEsq(z);
+        ;
         y.alturaNo = 1 + this.maior(altura(y.getEsq()), altura(y.getDir()));
         x.alturaNo = 1 + this.maior(altura(x.getEsq()), altura(x.getDir()));
-
         return x;
     }
-    public void remover(Integer chave) {
-        this.raiz = remover(raiz, chave);
-    }
 
-    private No<T> remover(No<T> no, Integer chave) {
-        if (no == null)
+    private No<T> menorChave(No<T> arv) {
+        No<T> temp = arv;
+
+        if (temp == null)
             return null;
 
-        if (chave.compareTo(no.getChave()) < 0)
-            no.setEsq(remover(no.getEsq(), chave));
-        else if (chave.compareTo(no.getChave()) > 0)
-            no.setDir(remover(no.getDir(), chave));
+        while (temp.getEsq() != null)
+            temp = temp.getEsq();
+
+        return temp;
+    }
+
+    public void inserir(Integer k, T v) {
+        this.raiz = this.inserir(getRaiz(), k, v);
+    }
+
+    private No<T> inserir(No<T> a, Integer k, T v) {
+        if (a == null)
+            return new No<T>(k, v);
+        if (a.compareTo(k) > 0)
+            a.esq = this.inserir(a.getEsq(), k, v);
+        else if (a.compareTo(k) < 0)
+            a.dir = this.inserir(a.getDir(), k, v);
+        else
+            return a;
+        /* 2. Atualiza altura do ancestral do nó inserido */
+        a.alturaNo = 1 + this.maior(this.altura(a.getEsq()), this.altura(a.getDir()));
+        /* 3. Obter FB */
+        int fb = this.obterFB(a);
+        int fbEsq = this.obterFB(a.getEsq());
+        int fbDir = this.obterFB(a.getDir());
+
+        if (fb > 1 && fbEsq >= 0)
+            return this.rds(a);
+        if (fb > 1 && fbEsq < 0) {
+            a.esq = this.res(a.esq);
+            return rds(a);
+        }
+
+        if (fb < -1 && fbDir <= 0)
+            return this.res(a);
+        if (fb < -1 && fbDir > 0) {
+            a.dir = this.rds(a.dir);
+            return res(a);
+        }
+        return a;
+    }
+
+    public void remover(Integer k, T v) {
+        raiz = remover(raiz, k, v);
+    }
+
+    private No<T> remover(No<T> arv, Integer k, T v) {
+        if (arv == null)
+            return arv;
+
+        if (k < arv.getRenavam())
+            arv.setEsq(remover(arv.getEsq(), k, v));
+        else if (k > arv.getRenavam())
+            arv.setDir(remover(arv.getDir(), k, v));
         else {
-            if (no.getEsq() == null || no.getDir() == null) {
-                no = (no.getEsq() != null) ? no.getEsq() : no.getDir();
+            if (arv.getEsq() == null && arv.getDir() == null) {
+                arv = null;
+            } else if (arv.getEsq() == null) {
+                No<T> temp = arv;
+                arv = temp.getDir();
+                temp = null;
+            } else if (arv.getDir() == null) {
+                No<T> temp = arv;
+                arv = temp.getEsq();
+                temp = null;
             } else {
-                No<T> temp = encontrarMinimo(no.getDir());
-                no.setChave(temp.getChave());
-                no.setValor(temp.getValor());
-                no.setDir(remover(no.getDir(), temp.getChave()));
+                No<T> temp = menorChave(arv.getDir());
+                arv.setRenavam(temp.getRenavam());
+                arv.setValor(temp.getValor());
+                temp.setRenavam(k);
+                arv.setDir(remover(arv.getDir(), k, v));
             }
         }
 
-        if (no != null) {
-            no.alturaNo = 1 + maior(altura(no.getEsq()), altura(no.getDir()));
-            int fb = obterFB(no);
+        if (arv == null)
+            return arv;
 
-            if (fb > 1 && obterFB(no.getEsq()) >= 0)
-                return rds(no);
+        arv.setAlturaNo(1 + maior(altura(arv.getEsq()), altura(arv.getDir())));
 
-            if (fb > 1 && obterFB(no.getEsq()) < 0) {
-                no.setEsq(res(no.getEsq()));
-                return rds(no);
-            }
+        int fb = obterFB(arv);
+        int fbSubArvEsq = obterFB(arv.getEsq());
+        int fbSubArvDir = obterFB(arv.getDir());
 
-            if (fb < -1 && obterFB(no.getDir()) <= 0)
-                return res(no);
+        if (fb > 1 && fbSubArvEsq >= 0)
+            return rds(arv);
 
-            if (fb < -1 && obterFB(no.getDir()) > 0) {
-                no.setDir(rds(no.getDir()));
-                return res(no);
-            }
+        if (fb < -1 && fbSubArvDir <= 0)
+            return res(arv);
+
+        if (fb > 1 && fbSubArvEsq < 0) {
+            arv.setEsq(res(arv.getEsq()));
+            return rds(arv);
         }
 
-        return no;
+        if (fb < -1 && fbSubArvDir > 0) {
+            arv.setDir(rds(arv.getDir()));
+            return res(arv);
+        }
+
+        return arv;
     }
 
-    private No<T> encontrarMinimo(No<T> no) {
-        if (no == null || no.getEsq() == null)
-            return no;
-        return encontrarMinimo(no.getEsq());
-    }
-    public T buscarPorPlaca(String placa) {
-        return buscarPorPlaca(getRaiz(), placa);
+    public No<T> buscar(Integer k) {
+        return buscar(getRaiz(), k);
     }
 
-    private T buscarPorPlaca(No<T> no, String placa) {
-        if (no == null) {
+    private No<T> buscar(No<T> r, Integer k) {
+        if (r == null)
             return null;
-        }
 
-        int comparacao = placa.compareTo(no.getValor().getPlaca());
-        if (comparacao == 0) {
-            return no.getValor();
-        } else if (comparacao < 0) {
-            return buscarPorPlaca(no.getEsq(), placa);
-        } else {
-            return buscarPorPlaca(no.getDir(), placa);
-        }
+        else if (k.compareTo(r.getRenavam()) < 0)
+            return this.buscar(r.getEsq(), k);
+
+        else if (k.compareTo(r.getRenavam()) > 0)
+            return this.buscar(r.getDir(), k);
+
+        else
+            return r;
     }
 
-    public T buscarPorRenavam(String renavam) {
+    public int contarNos() {
+        return contarNos(getRaiz());
+    }
+
+    private int contarNos(No<T> no) {
+        if (no == null) {
+            return 0;
+        }
+        return 1 + contarNos(no.getEsq()) + contarNos(no.getDir());
+    }
+
+
+    public No<T> buscarPorRenavam(Integer renavam) {
         return buscarPorRenavam(getRaiz(), renavam);
     }
 
-    private T buscarPorRenavam(No<T> no, String renavam) {
+    private No<T> buscarPorRenavam(No<T> no, Integer renavam) {
         if (no == null) {
             return null;
         }
-
-        int comparacao = renavam.compareTo(no.getValor().getRenavam());
+        int comparacao = renavam.compareTo(no.getRenavam());
         if (comparacao == 0) {
-            return no.getValor();
+            return no;
         } else if (comparacao < 0) {
             return buscarPorRenavam(no.getEsq(), renavam);
         } else {
             return buscarPorRenavam(no.getDir(), renavam);
         }
     }
-    /*
-     * Implementar a remoção de acordo com o código da prática 4
-     */
 }
