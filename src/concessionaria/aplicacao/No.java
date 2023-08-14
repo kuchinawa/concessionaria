@@ -2,14 +2,14 @@ package concessionaria.aplicacao;
 
 public class No<T> implements Comparable<Integer>{
 
-    Integer renavam;
+    Integer chave;
     T valor;
     Integer alturaNo;
     No<T> esq, dir;
 
     public No(Integer k, T v) {
 
-        this.setRenavam(k);
+        this.setChave(k);
         this.setValor(v);
         this.setAlturaNo(0);
         this.setEsq(null);
@@ -24,11 +24,11 @@ public class No<T> implements Comparable<Integer>{
         this.alturaNo = alturaNo;
     }
 
-    public Integer getRenavam() {
-        return renavam;
+    public Integer getChave() {
+        return chave;
     }
-    public void setRenavam(Integer renavam) {
-        this.renavam = renavam;
+    public void setChave(Integer chave) {
+        this.chave = chave;
     }
     public T getValor() {
         return valor;
@@ -51,9 +51,9 @@ public class No<T> implements Comparable<Integer>{
 
     @Override
     public int compareTo(Integer o) {
-        if(this.getRenavam() < o)
+        if(this.getChave() < o)
             return -1;
-        if(this.getRenavam() > o)
+        if(this.getChave() > o)
             return 1;
         return 0;
     }

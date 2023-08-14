@@ -15,10 +15,7 @@ public class Servidor {
     public Veiculo buscarPorRenavam(String renavam) {
         return baseDeDados.buscarPorRenavam(Integer.valueOf(renavam)).getValor();
     }
-
     public void cadastrarVeiculo(Veiculo veiculo) {
         baseDeDados.inserir(Integer.valueOf(veiculo.getPlaca()), veiculo);
     }
-
-
 }

@@ -10,10 +10,20 @@ public class Cliente {
 
     public static void main(String[] args) {
         ArvoreAVL<Veiculo> cos = new ArvoreAVL();
-        cos.inserir(1, new Veiculo("POG7T45", "781246752", "Icaro", "12346578545", "Kwid", 2020));
-
-
-
+        Veiculo v = new Veiculo("ABC1B34", "111111111", "Davi", "3214579521", "Kwid", 2020);
+        Condutores con = new Condutores("Davi", "111111111");
+        cos.inserir(v.getRenavamInt(), v);
+        Veiculo v2 = new Veiculo("ABC1B35", "333333333", "Davi", "3214579521", "Kwid", 2020);
+        Veiculo v3 = new Veiculo("POK2T34", "222222222", con.getNome(), con.getCpf(), "Forza", 2019);
+        cos.inserir(v2.getRenavamInt(), v2);
+        cos.inserir(v3.getRenavamInt(), v3);
+        cos.buscarPorRenavam(111111111);
+        cos.ordem();
+        cos.buscar(222222222);
+        System.out.println(cos.contarNos());
+        cos.remover(333333333);
+        cos.ordem();
+        System.out.println(cos.contarNos());
 
         /*
         Scanner scanner = new Scanner(System.in);

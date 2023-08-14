@@ -1,6 +1,8 @@
 package concessionaria.aplicacao;
 
 
+import concessionaria.entidade.Veiculo;
+
 public class ArvoreAVL<T> {
 
     No<T> raiz;
@@ -24,7 +26,7 @@ public class ArvoreAVL<T> {
     private void ordem(No<T> a) {
         if (a != null) {
             this.ordem(a.getEsq());
-            System.out.println(a.getRenavam() + ": " + a.getValor());
+            System.out.println(a.getChave() + ": " + a.getValor());
             this.ordem(a.getDir());
         }
     }
@@ -115,19 +117,18 @@ public class ArvoreAVL<T> {
         }
         return a;
     }
-
-    public void remover(Integer k, T v) {
-        raiz = remover(raiz, k, v);
+    public void remover(Integer k) {
+        raiz = remover(raiz, k);
     }
 
-    private No<T> remover(No<T> arv, Integer k, T v) {
+    private No<T> remover(No<T> arv, Integer k) {
         if (arv == null)
             return arv;
 
-        if (k < arv.getRenavam())
-            arv.setEsq(remover(arv.getEsq(), k, v));
-        else if (k > arv.getRenavam())
-            arv.setDir(remover(arv.getDir(), k, v));
+        if (k < arv.getChave())
+            arv.setEsq(remover(arv.getEsq(), k));
+        else if (k > arv.getChave())
+            arv.setDir(remover(arv.getDir(), k));
         else {
             if (arv.getEsq() == null && arv.getDir() == null) {
                 arv = null;
@@ -141,10 +142,10 @@ public class ArvoreAVL<T> {
                 temp = null;
             } else {
                 No<T> temp = menorChave(arv.getDir());
-                arv.setRenavam(temp.getRenavam());
+                arv.setChave(temp.getChave());
                 arv.setValor(temp.getValor());
-                temp.setRenavam(k);
-                arv.setDir(remover(arv.getDir(), k, v));
+                temp.setChave(k);
+                arv.setDir(remover(arv.getDir(), k));
             }
         }
 
@@ -175,7 +176,6 @@ public class ArvoreAVL<T> {
 
         return arv;
     }
-
     public No<T> buscar(Integer k) {
         return buscar(getRaiz(), k);
     }
@@ -184,10 +184,10 @@ public class ArvoreAVL<T> {
         if (r == null)
             return null;
 
-        else if (k.compareTo(r.getRenavam()) < 0)
+        else if (k.compareTo(r.getChave()) < 0)
             return this.buscar(r.getEsq(), k);
 
-        else if (k.compareTo(r.getRenavam()) > 0)
+        else if (k.compareTo(r.getChave()) > 0)
             return this.buscar(r.getDir(), k);
 
         else
@@ -207,6 +207,7 @@ public class ArvoreAVL<T> {
 
 
     public No<T> buscarPorRenavam(Integer renavam) {
+        System.out.println();
         return buscarPorRenavam(getRaiz(), renavam);
     }
 
@@ -214,7 +215,7 @@ public class ArvoreAVL<T> {
         if (no == null) {
             return null;
         }
-        int comparacao = renavam.compareTo(no.getRenavam());
+        int comparacao = renavam.compareTo(no.getChave());
         if (comparacao == 0) {
             return no;
         } else if (comparacao < 0) {
