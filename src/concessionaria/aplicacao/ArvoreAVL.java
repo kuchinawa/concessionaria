@@ -3,6 +3,8 @@ package concessionaria.aplicacao;
 
 import concessionaria.entidade.Veiculo;
 
+import java.util.List;
+
 public class ArvoreAVL<T> {
 
     No<T> raiz;
@@ -30,7 +32,6 @@ public class ArvoreAVL<T> {
             this.ordem(a.getDir());
         }
     }
-
     private Integer altura(No<T> a) {
         if (a == null)
             return -1;

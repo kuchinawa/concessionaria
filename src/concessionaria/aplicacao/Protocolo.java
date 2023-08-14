@@ -1,31 +1,21 @@
 package concessionaria.aplicacao;
 
+import concessionaria.entidade.Veiculo;
+
+import java.util.List;
+
 public class Protocolo {
+    Servidor servidor = new Servidor();
 
-    public static final String SEPARADOR = "|";
-
-    // Definição das operações possíveis
-    public static final String BUSCAR = "BUSCAR";
-    public static final String CADASTRAR = "CADASTRAR";
-    public static final String LISTAR = "LISTAR";
-    public static final String ALTERAR = "ALTERAR";
-    public static final String REMOVER = "REMOVER";
-
-    public static String criarMensagem(String operacao, String parametros) {
-        return operacao + SEPARADOR + parametros;
+    public void inserirVeiculo(Veiculo veiculo) {
+        servidor.inserir(veiculo);
+    }
+    public Veiculo buscarPorPlacaERenavam(String placa, String renavam) {
+        return servidor.buscarPorPlacaERenavam(placa, renavam);
     }
 
-    public static String extrairOperacao(String mensagem) {
-        String[] partes = mensagem.split(SEPARADOR);
-        return partes[0];
-    }
-
-    public static String extrairParametros(String mensagem) {
-        String[] partes = mensagem.split(SEPARADOR);
-        if (partes.length > 1) {
-            return partes[1];
-        }
-        return "";
+    public List<Veiculo> listarVeiculos() {
+        return servidor.listarVeiculosEmOrdem();
     }
 }
 

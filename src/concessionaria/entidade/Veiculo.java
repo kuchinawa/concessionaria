@@ -8,7 +8,7 @@ public class Veiculo {
     private String modelo;
     private int ano;
 
-    public Veiculo(String placa, String renavam, String nomeCondutor, String cpfCondutor, String modelo, int ano) {
+    public Veiculo( String renavam, String placa, String nomeCondutor, String cpfCondutor, String modelo, int ano) {
         setPlaca(placa);
         setRenavam(renavam);
         setCondutor(nomeCondutor, cpfCondutor);
@@ -71,7 +71,7 @@ public class Veiculo {
         return "Veiculo{" +
                 "placa='" + placa + '\'' +
                 ", renavam='" + renavam + '\'' +
-                ", condutor=" + condutor +
+                 condutor +
                 ", modelo='" + modelo + '\'' +
                 ", ano=" + ano +
                 '}';
