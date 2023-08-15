@@ -3,13 +3,26 @@ package concessionaria.aplicacao;
 
 import concessionaria.entidade.Veiculo;
 
+import java.io.IOException;
 import java.util.List;
+import java.io.FileWriter;
+import java.io.IOException;
+
+
 
 public class ArvoreAVL<T> {
+    private FileWriter fileWriter;
+    private static final String LOG_FILE_NAME = "arvore_log.txt";
 
     No<T> raiz;
+    private int numRotacoes;
 
     public ArvoreAVL() {
+            try {
+                fileWriter = new FileWriter(LOG_FILE_NAME);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         this.setRaiz(null);
     }
 
@@ -56,6 +69,13 @@ public class ArvoreAVL<T> {
         x.setDir(z);
         x.alturaNo = 1 + this.maior(altura(x.getEsq()), altura(x.getDir()));
         y.alturaNo = 1 + this.maior(altura(y.getEsq()), altura(y.getDir()));
+        try {
+            fileWriter.write("Rotação à Esquerda (res): Chave " + x.getChave() + "\n");
+            fileWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        numRotacoes++;
         return y;
     }
 
@@ -68,6 +88,13 @@ public class ArvoreAVL<T> {
         ;
         y.alturaNo = 1 + this.maior(altura(y.getEsq()), altura(y.getDir()));
         x.alturaNo = 1 + this.maior(altura(x.getEsq()), altura(x.getDir()));
+        try {
+            fileWriter.write("Rotação à Direita (rds): Chave " + y.getChave() + "\n");
+            fileWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        numRotacoes++;
         return x;
     }
 
@@ -84,8 +111,22 @@ public class ArvoreAVL<T> {
     }
 
     public void inserir(Integer k, T v) {
+        numRotacoes = 0;
         this.raiz = this.inserir(getRaiz(), k, v);
+        int alturaArvore = altura(getRaiz());
+        try {
+            fileWriter.write("Inserindo chave " + k + "\n" +
+                    "Altura da árvore: " + alturaArvore + "\n" +
+                    "Número de rotações: " + numRotacoes + "\n" +
+                    "-----------------------------------\n");
+            fileWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
+
+
 
     private No<T> inserir(No<T> a, Integer k, T v) {
         if (a == null)
@@ -119,8 +160,20 @@ public class ArvoreAVL<T> {
         return a;
     }
     public void remover(Integer k) {
+        numRotacoes = 0;
         raiz = remover(raiz, k);
+        int alturaArvore = altura(getRaiz());
+        try {
+            fileWriter.write("Removendo chave " + k + "\n" +
+                    "Altura da árvore: " + alturaArvore + "\n" +
+                   "Número de rotações: " + numRotacoes + "\n" +
+                    "-----------------------------------\n");
+            fileWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     private No<T> remover(No<T> arv, Integer k) {
         if (arv == null)
@@ -225,4 +278,5 @@ public class ArvoreAVL<T> {
             return buscarPorRenavam(no.getDir(), renavam);
         }
     }
+
 }

@@ -38,5 +38,9 @@ public class Protocolo {
     public String removerVeiculoPorRenavam(Integer renavam) {
         return servidor.removerPorRenavam(renavam);
     }
+    public int alturaRaizArvore() {
+        return servidor.alturaRaizArvore();
+    }
+
 }
 

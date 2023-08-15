@@ -1,7 +1,8 @@
 package concessionaria.entidade;
 
 import concessionaria.aplicacao.Protocolo;
-
+import java.io.FileWriter;
+import java.io.IOException;
 import javax.swing.*;
 import java.util.List;
 
@@ -12,7 +13,6 @@ public class Cliente {
     public static void inserir50Veiculos() {
         try {
             protocolo.inserirVeiculo(new Veiculo("123456789", "ABC1D23", "Ícaro", "12345678922", "KWID", 2021));
-            protocolo.inserirVeiculo(new Veiculo("432918374", "HFC8H99", "Roberto", "41385920384", "Civic", 2021));
             protocolo.inserirVeiculo(new Veiculo("582064820", "ABC1K32", "João", "12345678901", "Sedan", 2022));
             protocolo.inserirVeiculo(new Veiculo("547021559", "DEF2G34", "Maria", "23456789012", "Hatch", 2021));
             protocolo.inserirVeiculo(new Veiculo("973025445", "HJK3L45", "Pedro", "34567890123", "SUV", 2020));
@@ -113,11 +113,10 @@ public class Cliente {
                             Veiculo veiculo = new Veiculo(renavam, placa, nomeCondutor, cpfCondutor, modelo, ano);
                             protocolo.inserirVeiculo(veiculo);
 
-                            // Exibir mensagem de sucesso
+
                             JOptionPane.showMessageDialog(null, "Veículo inserido com sucesso:\n" + veiculo.toString());
 
                         } catch (IllegalArgumentException e) {
-                            // Exibir mensagem de erro
                             JOptionPane.showMessageDialog(null, "Erro ao inserir veículo: " + e.getMessage());
                         }
                         break;
@@ -188,7 +187,6 @@ public class Cliente {
                                     JOptionPane.showMessageDialog(null, "Opção de alteração inválida.");
                             }
 
-                            // Exibir mensagem de sucesso
                             JOptionPane.showMessageDialog(null, "Veículo alterado com sucesso:\n" + veiculoParaAlterar.toString());
                         } else {
                             JOptionPane.showMessageDialog(null, "Veículo não encontrado.");
@@ -207,10 +205,9 @@ public class Cliente {
                     case 6:
                         String subOpcaoStr = JOptionPane.showInputDialog(
                                 "Escolha uma opção:\n" +
-                                        "1. Opção 1 do submenu\n" +
-                                        "2. Opção 2 do submenu\n" +
-                                        "3. Opção 3 do submenu\n" +
-                                        "4. Voltar"
+                                        "1. Quantidade de veículos\n" +
+                                        "2. Altura da raiz\n" +
+                                        "3. Voltar"
                         );
 
                         try {
@@ -218,16 +215,15 @@ public class Cliente {
 
                             switch (subOpcao) {
                                 case 1:
-                                    // ... código para a opção 1 do submenu ...
+                                    int quantidadeVeiculos = protocolo.contarVeiculos();
+                                    JOptionPane.showMessageDialog(null, "Quantidade de veículos: " + quantidadeVeiculos);
                                     break;
                                 case 2:
-                                    // ... código para a opção 2 do submenu ...
+                                    int alturaRaiz = protocolo.alturaRaizArvore();
+                                    JOptionPane.showMessageDialog(null, "Altura do nó raiz da árvore: " + alturaRaiz);
                                     break;
                                 case 3:
-                                    // ... código para a opção 3 do submenu ...
-                                    break;
-                                case 4:
-                                    // Voltar para o menu principal
+                                    //volta para o menu principal
                                     break;
                                 default:
                                     JOptionPane.showMessageDialog(null, "Opção inválida. Escolha uma opção válida.");
@@ -238,7 +234,7 @@ public class Cliente {
                         break;
                     case 7:
                         JOptionPane.showMessageDialog(null, "Encerrando cliente...");
-                        return; // Encerra o programa
+                        return;
                     default:
                         JOptionPane.showMessageDialog(null, "Opção inválida. Escolha uma opção válida.");
                 }
@@ -249,6 +245,11 @@ public class Cliente {
             }
 
 
+
         }
+
+
     }
+
+
 }

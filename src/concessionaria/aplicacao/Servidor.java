@@ -1,12 +1,12 @@
 package concessionaria.aplicacao;
 import concessionaria.entidade.Veiculo;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 public class Servidor {
-
     private ArvoreAVL<Veiculo> arvoreVeiculos;
-
     public Servidor() {
         arvoreVeiculos = new ArvoreAVL<>();
     }
@@ -31,6 +31,7 @@ public class Servidor {
     }
     public String inserir(Veiculo veiculo) {
         arvoreVeiculos.inserir(veiculo.getRenavamInt(), veiculo);
+
         return "Veículo inserido com sucesso.";
     }
     public void  listarVeiculos() {
@@ -54,8 +55,8 @@ public class Servidor {
         return "Veículo removido com sucesso.";
     }
     public void atualizarVeiculo(Veiculo veiculo) {
-        arvoreVeiculos.remover(veiculo.getRenavamInt()); // Remover o veículo antigo
-        arvoreVeiculos.inserir(veiculo.getRenavamInt(), veiculo); // Inserir o veículo atualizado
+        arvoreVeiculos.remover(veiculo.getRenavamInt());
+        arvoreVeiculos.inserir(veiculo.getRenavamInt(), veiculo);
     }
     public int contarVeiculos() {
         return arvoreVeiculos.contarNos();
@@ -67,6 +68,29 @@ public class Servidor {
             return "Veículo removido com sucesso.";
         }
         return "Veículo não encontrado.";
+    }
+    public int alturaRaizArvore() {
+        return arvoreVeiculos.raiz.getAlturaNo();
+    }
+
+    public void registrarOperacao(String operacao, Veiculo veiculo, int alturaArvore, String rotacoes) {
+        try {
+            FileWriter fileWriter = new FileWriter("log.txt", true);
+            fileWriter.write(operacao + " veículo:\n");
+            fileWriter.write("Renavam: " + veiculo.getRenavam() + "\n");
+            fileWriter.write("Placa: " + veiculo.getPlaca() + "\n");
+            fileWriter.write("Modelo: " + veiculo.getModelo() + "\n");
+            fileWriter.write("Ano: " + veiculo.getAno() + "\n");
+            fileWriter.write("Nome do Condutor: " + veiculo.getCondutor().getNome() + "\n");
+            fileWriter.write("CPF do Condutor: " + veiculo.getCondutor().getCpf() + "\n");
+            fileWriter.write("------------------------\n");
+            fileWriter.write("Altura da árvore: " + alturaArvore + "\n");
+            fileWriter.write(rotacoes);
+            fileWriter.write("++++++++++++++++++++++++\n");
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 
