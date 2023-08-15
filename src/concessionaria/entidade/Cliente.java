@@ -1,8 +1,6 @@
 package concessionaria.entidade;
 
 import concessionaria.aplicacao.Protocolo;
-import java.io.FileWriter;
-import java.io.IOException;
 import javax.swing.*;
 import java.util.List;
 
@@ -186,7 +184,7 @@ public class Cliente {
                                 default:
                                     JOptionPane.showMessageDialog(null, "Opção de alteração inválida.");
                             }
-
+                            protocolo.atualizarVeiculo(veiculoParaAlterar);
                             JOptionPane.showMessageDialog(null, "Veículo alterado com sucesso:\n" + veiculoParaAlterar.toString());
                         } else {
                             JOptionPane.showMessageDialog(null, "Veículo não encontrado.");

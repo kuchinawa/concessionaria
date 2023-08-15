@@ -1,15 +1,7 @@
 package concessionaria.aplicacao;
 
-
-import concessionaria.entidade.Veiculo;
-
 import java.io.IOException;
-import java.util.List;
 import java.io.FileWriter;
-import java.io.IOException;
-
-
-
 public class ArvoreAVL<T> {
     private FileWriter fileWriter;
     private static final String LOG_FILE_NAME = "arvore_log.txt";
@@ -126,8 +118,6 @@ public class ArvoreAVL<T> {
 
     }
 
-
-
     private No<T> inserir(No<T> a, Integer k, T v) {
         if (a == null)
             return new No<T>(k, v);
@@ -173,7 +163,6 @@ public class ArvoreAVL<T> {
             e.printStackTrace();
         }
     }
-
 
     private No<T> remover(No<T> arv, Integer k) {
         if (arv == null)

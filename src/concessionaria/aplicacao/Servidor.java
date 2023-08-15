@@ -1,8 +1,6 @@
 package concessionaria.aplicacao;
-import concessionaria.entidade.Veiculo;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import concessionaria.entidade.Veiculo;
 import java.util.ArrayList;
 import java.util.List;
 public class Servidor {
@@ -58,6 +56,7 @@ public class Servidor {
         arvoreVeiculos.remover(veiculo.getRenavamInt());
         arvoreVeiculos.inserir(veiculo.getRenavamInt(), veiculo);
     }
+
     public int contarVeiculos() {
         return arvoreVeiculos.contarNos();
     }
@@ -71,26 +70,6 @@ public class Servidor {
     }
     public int alturaRaizArvore() {
         return arvoreVeiculos.raiz.getAlturaNo();
-    }
-
-    public void registrarOperacao(String operacao, Veiculo veiculo, int alturaArvore, String rotacoes) {
-        try {
-            FileWriter fileWriter = new FileWriter("log.txt", true);
-            fileWriter.write(operacao + " veículo:\n");
-            fileWriter.write("Renavam: " + veiculo.getRenavam() + "\n");
-            fileWriter.write("Placa: " + veiculo.getPlaca() + "\n");
-            fileWriter.write("Modelo: " + veiculo.getModelo() + "\n");
-            fileWriter.write("Ano: " + veiculo.getAno() + "\n");
-            fileWriter.write("Nome do Condutor: " + veiculo.getCondutor().getNome() + "\n");
-            fileWriter.write("CPF do Condutor: " + veiculo.getCondutor().getCpf() + "\n");
-            fileWriter.write("------------------------\n");
-            fileWriter.write("Altura da árvore: " + alturaArvore + "\n");
-            fileWriter.write(rotacoes);
-            fileWriter.write("++++++++++++++++++++++++\n");
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
 
