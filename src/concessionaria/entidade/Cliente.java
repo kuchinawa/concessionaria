@@ -1,20 +1,176 @@
 package concessionaria.entidade;
 
 import concessionaria.aplicacao.Protocolo;
-import javax.swing.*;
-import java.util.List;
 
+import javax.swing.*;
 
 public class Cliente {
     static Protocolo protocolo = new Protocolo();
 
+
+    public static void main(String[] args) {
+
+        int i = Integer.parseInt(JOptionPane.showInputDialog("Escolha o servidor: \n1. Encadeamento Exterior\n2. Endereçamento Aberto\n"));
+        protocolo.escolherServidor(i);
+
+        inserir50Veiculos();
+        while (true) {
+            String opcaoStr = JOptionPane.showInputDialog(
+                    "Escolha uma opção:\n" +
+                            "1. Buscar veículo\n" +
+                            "2. Cadastrar veículo\n" +
+                            "3. Listar veículos\n" +
+                            "4. Alterar veículo\n" +
+                            "5. Remover veículo\n" +
+                            "6. Mais\n" +
+                            "7. Sair"
+            );
+            try {
+                int opcao = Integer.parseInt(opcaoStr);
+
+                switch (opcao) {
+                    case 1:
+                        String renavamBusca = JOptionPane.showInputDialog("Digite o renavam do veículo:");
+
+                        Veiculo veiculoEncontrado = protocolo.buscarPorPlacaouRenavam(renavamBusca);
+
+                        if (veiculoEncontrado != null) {
+                            JOptionPane.showMessageDialog(null, "Veículo encontrado:\n" + veiculoEncontrado.toString());
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Veículo não encontrado.");
+                        }
+                        break;
+
+                    case 2:
+                        try {
+                            String placa = JOptionPane.showInputDialog("Digite a placa do veículo: \n" +
+                                    "A placa deve estar no formato AAA1A11.");
+                            String renavam = JOptionPane.showInputDialog("Digite o renavam do veículo: \n" +
+                                    "O renavam deve ter 9 dígitos.");
+                            String nomeCondutor = JOptionPane.showInputDialog("Digite o nome do condutor:");
+                            String cpfCondutor = JOptionPane.showInputDialog("Digite o CPF do condutor:");
+                            String modelo = JOptionPane.showInputDialog("Digite o modelo do veículo:");
+                            int ano = Integer.parseInt(JOptionPane.showInputDialog("Digite o ano de fabricação do veículo:"));
+
+                            Veiculo veiculo = new Veiculo(renavam, placa, nomeCondutor, cpfCondutor, modelo, ano);
+                            protocolo.inserirVeiculo(veiculo);
+
+                            JOptionPane.showMessageDialog(null, "Veículo inserido com sucesso:\n" + veiculo.toString());
+
+                        } catch (IllegalArgumentException e) {
+                            JOptionPane.showMessageDialog(null, "Erro ao inserir veículo: " + e.getMessage());
+                        }
+                        break;
+
+                    case 3:
+                        protocolo.imprimir();
+                        break;
+
+                    case 4:
+                        String renavamAlteracao = JOptionPane.showInputDialog("Digite o renavam do veículo a ser alterado:");
+                        Veiculo veiculoParaAlterar = protocolo.buscarPorPlacaouRenavam(renavamAlteracao);
+
+                        if (veiculoParaAlterar != null) {
+                            String opcaoAlteracaoStr = JOptionPane.showInputDialog(
+                                    "Escolha o atributo a ser alterado:\n" +
+                                            "1. Placa\n" +
+                                            "2. Nome do Condutor\n" +
+                                            "3. CPF do Condutor\n" +
+                                            "4. Modelo\n" +
+                                            "5. Ano de Fabricação"
+                            );
+
+                            int opcaoAlteracao = Integer.parseInt(opcaoAlteracaoStr);
+
+                            switch (opcaoAlteracao) {
+                                case 1:
+                                    String novaPlaca = JOptionPane.showInputDialog("Digite a nova placa:");
+                                    veiculoParaAlterar.setPlaca(novaPlaca);
+                                    break;
+                                case 2:
+                                    String novoNomeCondutor = JOptionPane.showInputDialog("Digite o novo nome do condutor:");
+                                    veiculoParaAlterar.getCondutor().setNome(novoNomeCondutor);
+                                    break;
+                                case 3:
+                                    String novoCpfCondutor = JOptionPane.showInputDialog("Digite o novo CPF do condutor:");
+                                    veiculoParaAlterar.getCondutor().setCpf(novoCpfCondutor);
+                                    break;
+                                case 4:
+                                    String novoModelo = JOptionPane.showInputDialog("Digite o novo modelo:");
+                                    veiculoParaAlterar.setModelo(novoModelo);
+                                    break;
+                                case 5:
+                                    int novoAno = Integer.parseInt(JOptionPane.showInputDialog("Digite o novo ano de fabricação:"));
+                                    veiculoParaAlterar.setAno(novoAno);
+                                    break;
+                                default:
+                                    JOptionPane.showMessageDialog(null, "Opção de alteração inválida.");
+                            }
+                            protocolo.atualizarVeiculo(veiculoParaAlterar);
+                            JOptionPane.showMessageDialog(null, "Veículo alterado com sucesso:\n" + veiculoParaAlterar.toString());
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Veículo não encontrado.");
+                        }
+                        break;
+                    case 5:
+                        String renavamRemocaoStr = JOptionPane.showInputDialog("Digite o renavam do veículo a ser removido:");
+                        try {
+                            String mensagemRemocao = protocolo.removerVeiculoPorRenavam(renavamRemocaoStr);
+                            JOptionPane.showMessageDialog(null, mensagemRemocao);
+                        } catch (IllegalArgumentException e) {
+                            JOptionPane.showMessageDialog(null, "Erro: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                        }
+                        break;
+                    case 6:
+                        String subOpcaoStr = JOptionPane.showInputDialog(
+                                "Escolha uma opção:\n" +
+                                        "1. Quantidade de veículos\n" +
+                                        "2. Exibir Fator de Carga\n" +
+                                        "3. Voltar"
+                        );
+
+                        try {
+                            int subOpcao = Integer.parseInt(subOpcaoStr);
+
+                            switch (subOpcao) {
+                                case 1:
+                                    int quantidadeVeiculos = protocolo.contarVeiculos();
+                                    JOptionPane.showMessageDialog(null, "Quantidade de veículos: " + quantidadeVeiculos);
+                                    break;
+                                case 2:
+                                    float fatorDeCarga = protocolo.fatorDeCarga();
+                                    JOptionPane.showMessageDialog(null, "Atual fator de carga é " + fatorDeCarga);
+                                    break;
+                                case 3:
+                                    break;
+                                default:
+                                    JOptionPane.showMessageDialog(null, "Opção inválida. Escolha uma opção válida.");
+                            }
+                        } catch (NumberFormatException e) {
+                            JOptionPane.showMessageDialog(null, "Opção inválida. Escolha uma opção numérica.");
+                        }
+                        break;
+                    case 7:
+                        JOptionPane.showMessageDialog(null, "Encerrando cliente...");
+                        return;
+                    default:
+                        JOptionPane.showMessageDialog(null, "Opção inválida. Escolha uma opção válida.");
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Opção inválida. Escolha uma opção numérica.");
+            } catch (IllegalArgumentException e) {
+                JOptionPane.showMessageDialog(null, "Erro: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
     public static void inserir50Veiculos() {
         try {
             protocolo.inserirVeiculo(new Veiculo("123456789", "ABC1D23", "Ícaro", "12345678922", "KWID", 2021));
-            protocolo.inserirVeiculo(new Veiculo("582064820", "ABC1K32", "João", "12345678901", "Sedan", 2022));
-            protocolo.inserirVeiculo(new Veiculo("547021559", "DEF2G34", "Maria", "23456789012", "Hatch", 2021));
-            protocolo.inserirVeiculo(new Veiculo("973025445", "HJK3L45", "Pedro", "34567890123", "SUV", 2020));
-            protocolo.inserirVeiculo(new Veiculo("192748467", "MNB4O56", "Ana", "45678901234", "Crossover", 2019));
+            protocolo.inserirVeiculo(new Veiculo("111111112", "AAA1A12", "Paulo Henrique", "12345678901", "Ferrari", 2022));
+            protocolo.inserirVeiculo(new Veiculo("111111113", "AAA1A13", "Maria", "23456789012", "Hatch", 2021));
+            protocolo.inserirVeiculo(new Veiculo("111111114", "AAA1A14", "Pedro", "34567890123", "SUV", 2020));
+            protocolo.inserirVeiculo(new Veiculo("999999999", "AAA1A19", "Ana", "45678901234", "Crossover", 2019));
             protocolo.inserirVeiculo(new Veiculo("617295837", "POI5Q67", "Carlos", "56789012345", "Sedan", 2018));
             protocolo.inserirVeiculo(new Veiculo("840562973", "ZXC6V78", "Mariana", "67890123456", "Hatch", 2022));
             protocolo.inserirVeiculo(new Veiculo("475916238", "ASD7F89", "Lucas", "78901234567", "SUV", 2021));
@@ -65,189 +221,4 @@ public class Cliente {
             System.out.println("Erro ao inserir veículo: " + e.getMessage());
         }
     }
-
-    public static void main(String[] args) {
-        inserir50Veiculos();
-        while (true) {
-            String opcaoStr = JOptionPane.showInputDialog(
-                    "Escolha uma opção:\n" +
-                            "1. Buscar veículo\n" +
-                            "2. Cadastrar veículo\n" +
-                            "3. Listar veículos\n" +
-                            "4. Alterar veículo\n" +
-                            "5. Remover veículo\n" +
-                            "6. Mais\n" +
-                            "7. Sair"
-            );
-
-            try {
-                int opcao = Integer.parseInt(opcaoStr);
-
-                switch (opcao) {
-                    case 1:
-                        String placaBusca = JOptionPane.showInputDialog("Digite a placa do veículo:");
-                        String renavamBusca = JOptionPane.showInputDialog("Digite o renavam do veículo:");
-
-                        Veiculo veiculoEncontrado = protocolo.buscarPorPlacaERenavam(placaBusca, renavamBusca);
-
-                        if (veiculoEncontrado != null) {
-                            JOptionPane.showMessageDialog(null, "Veículo encontrado:\n" + veiculoEncontrado.toString());
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Veículo não encontrado.");
-                        }
-                        break;
-
-                    case 2:
-                        try {
-                            String placa = JOptionPane.showInputDialog("Digite a placa do veículo: \n" +
-                                    "A placa deve estar no formato AAA1A11.");
-                            String renavam = JOptionPane.showInputDialog("Digite o renavam do veículo: \n" +
-                                    "O renavam deve ter 9 dígitos.");
-                            String nomeCondutor = JOptionPane.showInputDialog("Digite o nome do condutor:");
-                            String cpfCondutor = JOptionPane.showInputDialog("Digite o CPF do condutor:");
-                            String modelo = JOptionPane.showInputDialog("Digite o modelo do veículo:");
-                            int ano = Integer.parseInt(JOptionPane.showInputDialog("Digite o ano de fabricação do veículo:"));
-
-                            Veiculo veiculo = new Veiculo(renavam, placa, nomeCondutor, cpfCondutor, modelo, ano);
-                            protocolo.inserirVeiculo(veiculo);
-
-
-                            JOptionPane.showMessageDialog(null, "Veículo inserido com sucesso:\n" + veiculo.toString());
-
-                        } catch (IllegalArgumentException e) {
-                            JOptionPane.showMessageDialog(null, "Erro ao inserir veículo: " + e.getMessage());
-                        }
-                        break;
-                    case 3:
-                        protocolo.listarVeiculos();
-                        List<Veiculo> veiculos = protocolo.listarVeiculosEmOrdem();
-                        StringBuilder listaVeiculos = new StringBuilder();
-
-                        if (!veiculos.isEmpty()) {
-                            listaVeiculos.append("Renavam\tPlaca\tNome \tCPF \tModelo\tAno\n");
-
-                            for (Veiculo veiculo : veiculos) {
-                                String linha = String.format("%s\t%s\t%s\t%s\t%s\t%d%n",
-                                        veiculo.getRenavam(), veiculo.getPlaca(), veiculo.getCondutor().getNome(),
-                                        veiculo.getCondutor().getCpf(), veiculo.getModelo(), veiculo.getAno());
-
-                                listaVeiculos.append(linha);
-                            }
-
-                            JTextArea textArea = new JTextArea(10, 50);
-                            textArea.setText(listaVeiculos.toString());
-                            textArea.setEditable(false);
-
-                            JScrollPane scrollPane = new JScrollPane(textArea);
-                            JOptionPane.showMessageDialog(null, scrollPane, "Lista dos " + protocolo.contarVeiculos() + " veiculos", JOptionPane.INFORMATION_MESSAGE);
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Nenhum veículo encontrado.");
-                        }
-                        break;
-                    case 4:
-                        String renavamAlteracao = JOptionPane.showInputDialog("Digite o renavam do veículo a ser alterado:");
-                        Veiculo veiculoParaAlterar = protocolo.buscarPorRenavam(renavamAlteracao);
-
-                        if (veiculoParaAlterar != null) {
-                            String opcaoAlteracaoStr = JOptionPane.showInputDialog(
-                                    "Escolha o atributo a ser alterado:\n" +
-                                            "1. Placa\n" +
-                                            "2. Nome do Condutor\n" +
-                                            "3. CPF do Condutor\n" +
-                                            "4. Modelo\n" +
-                                            "5. Ano de Fabricação"
-                            );
-
-                            int opcaoAlteracao = Integer.parseInt(opcaoAlteracaoStr);
-
-                            switch (opcaoAlteracao) {
-                                case 1:
-                                    String novaPlaca = JOptionPane.showInputDialog("Digite a nova placa:");
-                                    veiculoParaAlterar.setPlaca(novaPlaca);
-                                    break;
-                                case 2:
-                                    String novoNomeCondutor = JOptionPane.showInputDialog("Digite o novo nome do condutor:");
-                                    veiculoParaAlterar.getCondutor().setNome(novoNomeCondutor);
-                                    break;
-                                case 3:
-                                    String novoCpfCondutor = JOptionPane.showInputDialog("Digite o novo CPF do condutor:");
-                                    veiculoParaAlterar.getCondutor().setCpf(novoCpfCondutor);
-                                    break;
-                                case 4:
-                                    String novoModelo = JOptionPane.showInputDialog("Digite o novo modelo:");
-                                    veiculoParaAlterar.setModelo(novoModelo);
-                                    break;
-                                case 5:
-                                    int novoAno = Integer.parseInt(JOptionPane.showInputDialog("Digite o novo ano de fabricação:"));
-                                    veiculoParaAlterar.setAno(novoAno);
-                                    break;
-                                default:
-                                    JOptionPane.showMessageDialog(null, "Opção de alteração inválida.");
-                            }
-                            protocolo.atualizarVeiculo(veiculoParaAlterar);
-                            JOptionPane.showMessageDialog(null, "Veículo alterado com sucesso:\n" + veiculoParaAlterar.toString());
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Veículo não encontrado.");
-                        }
-                        break;
-                    case 5:
-                        String renavamRemocaoStr = JOptionPane.showInputDialog("Digite o renavam do veículo a ser removido:");
-                        try {
-                            Integer renavamRemocao = Integer.parseInt(renavamRemocaoStr);
-                            String mensagemRemocao = protocolo.removerVeiculoPorRenavam(renavamRemocao);
-                            JOptionPane.showMessageDialog(null, mensagemRemocao);
-                        } catch (NumberFormatException e) {
-                            JOptionPane.showMessageDialog(null, "Renavam inválido. Digite um número válido.");
-                        }
-                        break;
-                    case 6:
-                        String subOpcaoStr = JOptionPane.showInputDialog(
-                                "Escolha uma opção:\n" +
-                                        "1. Quantidade de veículos\n" +
-                                        "2. Altura da raiz\n" +
-                                        "3. Voltar"
-                        );
-
-                        try {
-                            int subOpcao = Integer.parseInt(subOpcaoStr);
-
-                            switch (subOpcao) {
-                                case 1:
-                                    int quantidadeVeiculos = protocolo.contarVeiculos();
-                                    JOptionPane.showMessageDialog(null, "Quantidade de veículos: " + quantidadeVeiculos);
-                                    break;
-                                case 2:
-                                    int alturaRaiz = protocolo.alturaRaizArvore();
-                                    JOptionPane.showMessageDialog(null, "Altura do nó raiz da árvore: " + alturaRaiz);
-                                    break;
-                                case 3:
-                                    //volta para o menu principal
-                                    break;
-                                default:
-                                    JOptionPane.showMessageDialog(null, "Opção inválida. Escolha uma opção válida.");
-                            }
-                        } catch (NumberFormatException e) {
-                            JOptionPane.showMessageDialog(null, "Opção inválida. Escolha uma opção numérica.");
-                        }
-                        break;
-                    case 7:
-                        JOptionPane.showMessageDialog(null, "Encerrando cliente...");
-                        return;
-                    default:
-                        JOptionPane.showMessageDialog(null, "Opção inválida. Escolha uma opção válida.");
-                }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Opção inválida. Escolha uma opção numérica.");
-            } catch (IllegalArgumentException e) {
-                JOptionPane.showMessageDialog(null, "Erro: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-
-
-
-        }
-
-
-    }
-
-
 }

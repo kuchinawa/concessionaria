@@ -1,60 +1,45 @@
 package concessionaria.aplicacao;
 
-public class No<T> implements Comparable<Integer>{
+public class No<T> implements Comparable<String>{
 
-    Integer chave;
-    T valor;
-    Integer alturaNo;
-    No<T> esq, dir;
+    private String chave;
+    private T valor;
+    private No <T> proximo;
 
-    public No(Integer k, T v) {
-
-        this.setChave(k);
-        this.setValor(v);
-        this.setAlturaNo(0);
-        this.setEsq(null);
-        this.setDir(null);
-    }
-
-    public int getAlturaNo() {
-        return alturaNo;
-    }
-
-    public void setAlturaNo(int alturaNo) {
-        this.alturaNo = alturaNo;
-    }
-
-    public Integer getChave() {
-        return chave;
-    }
-    public void setChave(Integer chave) {
+    public No(String chave, T valor) {
         this.chave = chave;
-    }
-    public T getValor() {
-        return valor;
-    }
-    public void setValor(T valor) {
         this.valor = valor;
-    }
-    public No<T> getEsq() {
-        return esq;
-    }
-    public void setEsq(No<T> esq) {
-        this.esq = esq;
-    }
-    public No<T> getDir() {
-        return dir;
-    }
-    public void setDir(No<T> dir) {
-        this.dir = dir;
+        this.proximo = null;
     }
 
     @Override
-    public int compareTo(Integer o) {
-        if(this.getChave() < o)
+    public int compareTo(String o) {
+        if(this.getChave().compareTo(o) < 0)
             return -1;
-        if(this.getChave() > o)
+        if(this.getChave().compareTo(o) > 0)
             return 1;
         return 0;
+    }
+
+    public T getValor() {
+        return valor;
+    }
+
+    public void setValor(T valor) {
+        this.valor = valor;
+    }
+
+    public No<T> getProximo() {
+        return proximo;
+    }
+    public String getChave() {
+        return chave;
+    }
+
+    public void setChave(String chave) {
+        this.chave = chave;
+    }
+    public void setProximo(No<T> proximo) {
+        this.proximo = proximo;
     }
 }
